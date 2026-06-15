@@ -223,14 +223,62 @@ function getLoc(){
     st.innerHTML='<span style="color:#16a34a"><i class="bi bi-check-circle-fill"></i> '+LAT+', '+LNG+'</span>';
     var map=document.getElementById('locMap');map.style.display='block';
     map.innerHTML='<iframe width="100%" height="185" style="border:0" loading="lazy" src="https://maps.google.com/maps?q='+LAT+','+LNG+'&z=16&output=embed"></iframe>';
-  },function(err){
-    var msg='تعذّر تحديد الموقع';
-    if(err.code===1)msg='تم رفض إذن الموقع — فعّله من إعدادات المتصفح وحاول تاني';
-    else if(err.code===3)msg='انتهت المهلة — حاول مرة أخرى';
-    st.innerHTML='<span style="color:#dc2626"><i class="bi bi-x-circle-fill"></i> '+msg+'</span>';
-  },{enableHighAccuracy:true,timeout:12000,maximumAge:0});
-}
+},function(err){
+    if(err.code===1){
+      st.innerHTML='<span style="color:#dc2626"><i class="bi bi-x-circle-fill"></i> تم رفض إذن الموقع — اتبع الخطوات</span>';
+      showLocHelp();
+    } else {
+      var msg=(err.code===3)?'انتهت المهلة — حاول مرة أخرى':'تعذّر تحديد الموقع — حاول مرة أخرى';
+      st.innerHTML='<span style="color:#dc2626"><i class="bi bi-x-circle-fill"></i> '+msg+'</span>';
+    }
+  },{enableHighAccuracy:true,timeout:12000,maximumAge:0});}
+function showLocHelp(){
+  var old=document.getElementById('_locHelp_'); if(old) old.remove();
+  var ua=navigator.userAgent||'';
+  var isIOS=/iPhone|iPad|iPod/i.test(ua);
+  var isAndroid=/Android/i.test(ua);
 
+  var osHead, listItems;
+  if(isIOS){
+    osHead='<i class="bi bi-apple"></i> آيفون (Safari)';
+    listItems='<li>افتح <b>الإعدادات</b> في الهاتف</li>'
+      +'<li>انزل لـ <b>Safari</b> ثم <b>الموقع</b></li>'
+      +'<li>اختار <b>اسأل</b> أو <b>السماح</b></li>'
+      +'<li>تأكد إن <b>خدمات الموقع</b> مفعّلة (الإعدادات ← الخصوصية ← خدمات الموقع)</li>'
+      +'<li>ارجع للصفحة واضغط <b>"مشاركة موقعي"</b> تاني</li>';
+  } else if(isAndroid){
+    osHead='<i class="bi bi-android2"></i> أندرويد (Chrome)';
+    listItems='<li>اضغط على أيقونة <b>🔒 القفل</b> (أو ⓘ) جنب رابط الموقع فوق</li>'
+      +'<li>اختار <b>الأذونات / Permissions</b></li>'
+      +'<li>فعّل <b>الموقع (Location)</b> ثم <b>السماح</b></li>'
+      +'<li>تأكد إن <b>GPS</b> مفعّل في الهاتف</li>'
+      +'<li>ارجع واضغط <b>"مشاركة موقعي"</b> تاني</li>';
+  } else {
+    osHead='<i class="bi bi-globe"></i> المتصفح';
+    listItems='<li>اضغط على أيقونة <b>🔒 القفل</b> جنب رابط الموقع</li>'
+      +'<li>اختار <b>الموقع (Location)</b> ثم <b>السماح (Allow)</b></li>'
+      +'<li>حدّث الصفحة واضغط <b>"مشاركة موقعي"</b> تاني</li>';
+  }
+
+  var m=document.createElement('div');
+  m.id='_locHelp_';
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10001;display:flex;align-items:center;justify-content:center;padding:16px';
+  m.innerHTML='<div style="background:#fff;border-radius:18px;width:100%;max-width:430px;overflow:hidden;box-shadow:0 14px 44px rgba(0,0,0,.3);font-family:Cairo,sans-serif">'
+    +'<div style="background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;padding:18px 20px;display:flex;align-items:center;gap:10px">'
+    +'<i class="bi bi-geo-alt-fill" style="font-size:22px"></i><span style="font-size:16px;font-weight:800">تفعيل إذن الموقع</span></div>'
+    +'<div style="padding:20px">'
+    +'<p style="font-size:13.5px;color:#374151;margin:0 0 14px;line-height:1.7">عشان نسجّل موقع شركتك بدقة محتاجين إذن الموقع. لو ظهرلك سؤال الإذن اضغط <b>السماح</b>، ولو متظهرش اتبع الخطوات:</p>'
+    +'<div style="font-size:13px;font-weight:800;color:var(--brand);margin-bottom:10px;display:flex;align-items:center;gap:7px">'+osHead+'</div>'
+    +'<ol style="margin:0 0 14px;padding-right:20px;font-size:13.5px;color:#374151;line-height:2.1">'+listItems+'</ol>'
+    +'<div style="background:#fef3c7;border:1px solid #f59e0b;border-radius:10px;padding:10px 13px;font-size:12.5px;color:#92400e;font-weight:600"><i class="bi bi-lightbulb-fill me-1"></i>تأكد إن خدمة الموقع (GPS) في الهاتف نفسه مفعّلة.</div>'
+    +'</div>'
+    +'<div style="padding:0 20px 20px;display:flex;gap:10px">'
+    +'<button onclick="document.getElementById(\'_locHelp_\').remove()" style="flex:1;background:#f1f5f9;border:1px solid #e2e8f0;color:#475569;border-radius:12px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">إغلاق</button>'
+    +'<button onclick="document.getElementById(\'_locHelp_\').remove();getLoc()" style="flex:1.4;background:linear-gradient(135deg,var(--brand),var(--brand-dark));border:none;color:#fff;border-radius:12px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit"><i class="bi bi-arrow-clockwise me-1"></i>حاول مرة أخرى</button>'
+    +'</div></div>';
+  document.body.appendChild(m);
+  m.onclick=function(e){ if(e.target===m) m.remove(); };
+}
 /* ── Submit ── */
 function submitForm(){
   var vendor=document.getElementById('fVendor').value.trim();
