@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تسجيل مورد جديد</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#C4151C;--brand-dark:#8E0F14;--brand-light:#FDEBEC;--border:#E6E8EC;--surface:#F5F6F8;--ink:#1A1D23;--gray:#6B7280}
+*{box-sizing:border-box}
+body{background:var(--surface);font-family:"Cairo",system-ui,sans-serif;color:var(--ink);margin:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+.hero{position:relative;overflow:hidden;text-align:center;color:#fff;padding:46px 18px 84px;background:linear-gradient(140deg,var(--brand) 0%,var(--brand-dark) 100%)}
+.hero::before{content:"";position:absolute;inset:0;opacity:.13;background:radial-gradient(circle at 12% 18%,#fff 0,transparent 36%),radial-gradient(circle at 88% 78%,#fff 0,transparent 30%)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:44px;background:var(--surface);border-radius:50% 50% 0 0/100% 100% 0 0}
+.hero-inner{position:relative;z-index:2}
+.logo-badge{width:108px;height:108px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 16px 42px rgba(0,0,0,.3),0 0 0 6px rgba(255,255,255,.18)}
+.logo-badge img{width:78%;height:78%;object-fit:contain}
+.logo-fallback{width:108px;height:108px;border-radius:50%;background:#fff;color:var(--brand);display:inline-flex;align-items:center;justify-content:center;font-size:48px;box-shadow:0 16px 42px rgba(0,0,0,.3),0 0 0 6px rgba(255,255,255,.18)}
+.hero h1{font-size:24px;font-weight:800;margin:18px 0 5px;letter-spacing:-.3px}
+.hero .sub{font-size:13.5px;font-weight:500;opacity:.9;margin:0}
+.hero .tag{display:inline-block;margin-top:13px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);border-radius:99px;padding:5px 16px;font-size:12px;font-weight:600}
+
+.wrap{max-width:640px;margin:-50px auto 34px;padding:0 14px;position:relative;z-index:5}
+.card{background:#fff;border-radius:22px;border:1px solid var(--border);box-shadow:0 14px 44px rgba(20,25,40,.09);overflow:hidden}
+.card-pad{padding:28px 22px}
+.sec-title{font-size:13px;font-weight:800;color:var(--brand);margin:0 0 16px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:"";flex:1;height:1px;background:var(--border)}
+
+.field{margin-bottom:19px}
+.lbl{font-size:13px;font-weight:700;margin-bottom:7px;display:block}
+.lbl .req{color:var(--brand);margin-left:2px}
+.inp{position:relative}
+.inp>i{position:absolute;top:14px;right:14px;color:var(--gray);font-size:16px;pointer-events:none}
+.form-control{border:1.5px solid var(--border);border-radius:12px;font-size:14px;padding:12px 14px;font-family:inherit;transition:.15s}
+.inp .form-control{padding-right:42px}
+.form-control:focus{border-color:var(--brand);box-shadow:0 0 0 3.5px rgba(196,21,28,.1);outline:none}
+.field.invalid .form-control{border-color:#dc2626;background:#fef4f4}
+.err-msg{color:#dc2626;font-size:12px;font-weight:600;margin-top:5px;display:none}
+.field.invalid .err-msg{display:block}
+
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{border:1.5px solid var(--border);background:#fff;color:var(--gray);border-radius:99px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;transition:.13s;user-select:none;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--brand);color:var(--brand)}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(196,21,28,.22)}
+.chip .bi-check-lg{display:none}.chip.on .bi-check-lg{display:inline}
+
+.loc-btn{width:100%;border:2px dashed var(--brand);background:var(--brand-light);color:var(--brand);border-radius:14px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px}
+.loc-btn:hover{background:#fbd3d5}
+.loc-btn.done{border-style:solid;border-color:#16a34a;background:#f0fdf4;color:#15803d}
+.loc-status{font-size:12.5px;font-weight:600;margin-top:8px;min-height:18px}
+.loc-map{height:185px;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-top:11px;display:none}
+
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;transition:.15s;font-family:inherit;box-shadow:0 8px 22px rgba(196,21,28,.28)}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(196,21,28,.34)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;width:0}
+.footer{text-align:center;font-size:12px;color:var(--gray);padding:14px 0 28px}
+
+.thanks{display:none;text-align:center;padding:46px 24px}
+.thanks .ico{width:88px;height:88px;border-radius:50%;background:#f0fdf4;color:#16a34a;font-size:46px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 0 8px #dcfce7}
+.thanks h2{font-weight:800;font-size:21px;margin-bottom:8px}
+.thanks .ref{display:inline-block;background:var(--surface);border:1.5px dashed var(--border);border-radius:10px;padding:8px 20px;font-weight:800;letter-spacing:2px;color:var(--brand);margin-top:8px;font-size:17px}
+.contacts{margin-top:28px;text-align:right;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
+.contacts-title{font-size:13px;font-weight:800;color:var(--brand);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.contact-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.contact-row:last-child{border-bottom:none}
+.c-ico{width:40px;height:40px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.c-info{flex:1;text-align:right}
+.c-name{font-weight:700;font-size:14px}
+.c-phone{font-size:13px;color:var(--gray);direction:ltr;text-align:right}
+.c-actions{display:flex;gap:8px}
+.c-btn{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--border);color:var(--brand);text-decoration:none;font-size:16px}
+.c-btn.wa{color:#25D366}
+
+#toastBox{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;width:92%;max-width:420px;display:flex;flex-direction:column;gap:8px}
+#preload{position:fixed;inset:0;background:var(--surface);display:flex;align-items:center;justify-content:center;z-index:99999;color:var(--brand);font-size:30px}
+</style>
+</head>
+<body>
+
+<div id="preload"><i class="bi bi-arrow-repeat" style="animation:spin 1s linear infinite"></i></div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<div id="toastBox"></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div id="logoBox"><div class="logo-fallback"><i class="bi bi-building"></i></div></div>
+    <h1>تسجيل مورد جديد</h1>
+    <p class="sub" id="groupName">Cairo 3A</p>
+    <span class="tag"><i class="bi bi-patch-check-fill me-1"></i>نموذج الموردين المعتمد</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-pad" id="formBox">
+      <input type="text" id="website" class="hp" tabindex="-1" autocomplete="off">
+
+      <div class="sec-title"><i class="bi bi-info-circle-fill"></i>بيانات الشركة</div>
+
+      <div class="field" id="f_vendor">
+        <label class="lbl">اسم الشركة / المورد<span class="req">*</span></label>
+        <div class="inp"><input id="fVendor" class="form-control" placeholder="مثال: شركة النور للتوريدات"><i class="bi bi-building"></i></div>
+        <div class="err-msg">اسم الشركة مطلوب</div>
+      </div>
+
+      <div class="field" id="f_contact">
+        <label class="lbl">اسم المسؤول<span class="req">*</span></label>
+        <div class="inp"><input id="fContact" class="form-control" placeholder="الاسم الكامل للشخص المسؤول"><i class="bi bi-person"></i></div>
+        <div class="err-msg">اسم المسؤول مطلوب</div>
+      </div>
+
+      <div class="field" id="f_mobile">
+        <label class="lbl">رقم التواصل<span class="req">*</span></label>
+        <div class="inp"><input id="fMobile" class="form-control" type="tel" inputmode="tel" placeholder="01000000000"><i class="bi bi-telephone"></i></div>
+        <div class="err-msg">أدخل رقم تواصل صحيح (٨ أرقام على الأقل)</div>
+      </div>
+
+      <div class="sec-title" style="margin-top:24px"><i class="bi bi-box-seam-fill"></i>النشاط والأصناف</div>
+
+      <div class="field" id="f_cats" style="display:none">
+        <label class="lbl">الأصناف اللي بتشتغل فيها<span class="req">*</span> <small class="text-muted fw-normal">(اختر واحد أو أكثر)</small></label>
+        <div class="chips" id="catsChips"></div>
+        <div class="err-msg">اختر صنف واحد على الأقل</div>
+      </div>
+
+      <div class="field" id="f_notes">
+        <label class="lbl">تفاصيل النشاط / أصناف إضافية<span class="req">*</span></label>
+        <textarea id="fNotes" class="form-control" rows="3" placeholder="اكتب وصف النشاط أو أي أصناف إضافية بالتفصيل..."></textarea>
+        <div class="err-msg">هذا الحقل مطلوب</div>
+      </div>
+
+      <div class="sec-title" style="margin-top:24px"><i class="bi bi-geo-alt-fill"></i>الموقع</div>
+
+      <div class="field" id="f_loc">
+        <button type="button" class="loc-btn" id="locBtn" onclick="getLoc()">
+          <i class="bi bi-crosshair"></i><span id="locLabel">مشاركة موقعي الحالي</span>
+        </button>
+        <div class="loc-status" id="locStatus"></div>
+        <div class="loc-map" id="locMap"></div>
+        <div class="err-msg">تحديد الموقع مطلوب</div>
+      </div>
+
+      <button class="submit-btn mt-2" id="submitBtn" onclick="submitForm()"><i class="bi bi-send-fill me-1"></i>إرسال البيانات</button>
+    </div>
+
+    <div class="thanks" id="thanksBox">
+      <div class="ico"><i class="bi bi-check-lg"></i></div>
+      <h2>تم استلام بياناتك بنجاح</h2>
+      <p class="text-muted" style="font-size:14px">شكراً لتسجيلك. سيتم مراجعة البيانات والتواصل معك قريباً.</p>
+      <div style="font-size:13px;color:var(--gray)">رقم الطلب المرجعي</div>
+      <div class="ref" id="refNo">—</div>
+
+      <div class="contacts" id="contactsBox" style="display:none">
+        <div class="contacts-title"><i class="bi bi-headset"></i>للتواصل مع قسم المشتريات</div>
+        <div id="contactsList"></div>
+      </div>
+
+      <div class="mt-4">
+        <button class="btn btn-outline-secondary btn-sm" onclick="location.reload()"><i class="bi bi-plus-lg me-1"></i>تسجيل مورد آخر</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer">نظام إدارة المشتريات — Cairo 3A</div>
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbw6YTBtXiEvnZFYS5ieuLZ66cMhm1gd0fQiLdeE4gb4ddg7y3imIV1zfgdqfIRt4jwk/exec';
+var LAT='', LNG='', selectedCats=[], hasCats=false, CONTACTS=[];
+
+function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+function toast(msg,type){var c={success:'#16a34a',error:'#dc2626',warning:'#b45309',info:'#185FA5'}[type||'info'];var el=document.createElement('div');el.textContent=msg;el.style.cssText='background:#fff;border-right:4px solid '+c+';color:#1f2937;padding:12px 16px;border-radius:11px;box-shadow:0 6px 24px rgba(0,0,0,.16);font-size:13.5px;font-weight:600';document.getElementById('toastBox').appendChild(el);setTimeout(function(){el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(function(){el.remove();},300);},3400);}
+function mark(id,on){var f=document.getElementById(id);if(!f)return;if(on)f.classList.add('invalid');else f.classList.remove('invalid');}
+
+/* ── API ── */
+function api(action,payload){
+  return fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:action,payload:payload||{}})})
+    .then(function(r){return r.json();});
+}
+
+/* ── Init ── */
+api('init').then(function(d){
+  document.getElementById('preload').style.display='none';
+  if(d.branding && d.branding.logo){
+    var src=String(d.branding.logo).indexOf('data:')===0?d.branding.logo:'data:image/png;base64,'+d.branding.logo;
+    document.getElementById('logoBox').innerHTML='<div class="logo-badge"><img src="'+src+'" alt="logo"></div>';
+  }
+  if(d.branding && d.branding.name) document.getElementById('groupName').textContent=d.branding.name;
+  CONTACTS=d.contacts||[];
+  if(d.categories && d.categories.length){
+    hasCats=true;
+    var box=document.getElementById('catsChips');
+    d.categories.forEach(function(c){
+      var chip=document.createElement('div');chip.className='chip';chip.innerHTML='<i class="bi bi-check-lg"></i>'+escapeHtml(c);
+      chip.onclick=function(){var i=selectedCats.indexOf(c);if(i>=0){selectedCats.splice(i,1);chip.classList.remove('on');}else{selectedCats.push(c);chip.classList.add('on');}if(selectedCats.length)mark('f_cats',false);};
+      box.appendChild(chip);
+    });
+    document.getElementById('f_cats').style.display='block';
+  }
+}).catch(function(){
+  document.getElementById('preload').style.display='none';
+  toast('تعذّر تحميل البيانات — تأكد من الاتصال','error');
+});
+
+['fVendor','fContact','fMobile','fNotes'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){mark('f_'+id.replace(/^f/,'').toLowerCase(),false);});
+});
+
+/* ── GPS (يعمل بالكامل على GitHub Pages) ── */
+function getLoc(){
+  var st=document.getElementById('locStatus');
+  if(!navigator.geolocation){st.innerHTML='<span style="color:#dc2626">المتصفح لا يدعم تحديد الموقع</span>';return;}
+  st.innerHTML='<span style="color:#64748b"><i class="bi bi-hourglass-split"></i> جارٍ تحديد موقعك...</span>';
+  navigator.geolocation.getCurrentPosition(function(pos){
+    LAT=pos.coords.latitude.toFixed(6);LNG=pos.coords.longitude.toFixed(6);mark('f_loc',false);
+    var btn=document.getElementById('locBtn');btn.classList.add('done');
+    document.getElementById('locLabel').textContent='تم تحديد الموقع ✓ (اضغط لإعادة التحديد)';
+    st.innerHTML='<span style="color:#16a34a"><i class="bi bi-check-circle-fill"></i> '+LAT+', '+LNG+'</span>';
+    var map=document.getElementById('locMap');map.style.display='block';
+    map.innerHTML='<iframe width="100%" height="185" style="border:0" loading="lazy" src="https://maps.google.com/maps?q='+LAT+','+LNG+'&z=16&output=embed"></iframe>';
+  },function(err){
+    var msg='تعذّر تحديد الموقع';
+    if(err.code===1)msg='تم رفض إذن الموقع — فعّله من إعدادات المتصفح وحاول تاني';
+    else if(err.code===3)msg='انتهت المهلة — حاول مرة أخرى';
+    st.innerHTML='<span style="color:#dc2626"><i class="bi bi-x-circle-fill"></i> '+msg+'</span>';
+  },{enableHighAccuracy:true,timeout:12000,maximumAge:0});
+}
+
+/* ── Submit ── */
+function submitForm(){
+  var vendor=document.getElementById('fVendor').value.trim();
+  var contact=document.getElementById('fContact').value.trim();
+  var mobileR=document.getElementById('fMobile').value.trim();
+  var notes=document.getElementById('fNotes').value.trim();
+  var digits=mobileR.replace(/\D/g,'');
+  var firstBad=null;function fail(id){mark(id,true);if(!firstBad)firstBad=id;}
+  if(!vendor)fail('f_vendor');
+  if(!contact)fail('f_contact');
+  if(digits.length<8)fail('f_mobile');
+  if(hasCats&&!selectedCats.length)fail('f_cats');
+  if(!notes)fail('f_notes');
+  if(!LAT||!LNG)fail('f_loc');
+  if(firstBad){toast('من فضلك أكمل كل الحقول المطلوبة','warning');document.getElementById(firstBad).scrollIntoView({behavior:'smooth',block:'center'});return;}
+
+  var btn=document.getElementById('submitBtn');btn.disabled=true;btn.innerHTML='<i class="bi bi-hourglass-split me-1"></i>جارٍ الإرسال...';
+  api('submit',{vendor:vendor,contact:contact,mobile:mobileR,categories:selectedCats.join('، '),notes:notes,lat:LAT,lng:LNG,website:document.getElementById('website').value})
+    .then(function(res){
+      if(res&&res.ok){
+        document.getElementById('formBox').style.display='none';
+        document.getElementById('thanksBox').style.display='block';
+        document.getElementById('refNo').textContent=res.ref||'—';
+        renderContacts();
+        window.scrollTo({top:0,behavior:'smooth'});
+      }else{btn.disabled=false;btn.innerHTML='<i class="bi bi-send-fill me-1"></i>إرسال البيانات';toast((res&&res.msg)||'حدث خطأ، حاول مرة أخرى','error');}
+    })
+    .catch(function(){btn.disabled=false;btn.innerHTML='<i class="bi bi-send-fill me-1"></i>إرسال البيانات';toast('خطأ في الاتصال','error');});
+}
+
+function waLink(phone){var d=String(phone).replace(/\D/g,'');if(d.indexOf('0')===0)d='2'+d;return 'https://wa.me/'+d;}
+function renderContacts(){
+  if(!CONTACTS.length){document.getElementById('contactsBox').style.display='none';return;}
+  var box=document.getElementById('contactsList');box.innerHTML='';
+  CONTACTS.forEach(function(c){
+    var wa=c.phone?waLink(c.phone):'';
+    var row=document.createElement('div');row.className='contact-row';
+    row.innerHTML='<div class="c-ico"><i class="bi bi-person-fill"></i></div>'
+      +'<div class="c-info"><div class="c-name">'+escapeHtml(c.name)+'</div>'+(c.phone?'<div class="c-phone">'+escapeHtml(c.phone)+'</div>':'')+'</div>'
+      +(c.phone?'<div class="c-actions"><a href="tel:'+escapeHtml(c.phone)+'" class="c-btn"><i class="bi bi-telephone-fill"></i></a>'+(wa?'<a href="'+wa+'" target="_blank" class="c-btn wa"><i class="bi bi-whatsapp"></i></a>':'')+'</div>':'');
+    box.appendChild(row);
+  });
+  document.getElementById('contactsBox').style.display='block';
+}
+</script>
+</body>
+</html>
