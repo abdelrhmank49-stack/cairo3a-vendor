@@ -172,8 +172,8 @@ body{background:var(--surface);font-family:"Cairo",system-ui,sans-serif;color:va
 </div><div class="footer">نظام إدارة المشتريات — Cairo 3A</div></div>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycby-pDQsc4Mq3yZF1STIkHxaIbB6ceS_r3WWjKkjCezfg_T1OjF3Fykusyi-FWn-xfNp/exec';
-var LAT='',LNG='',MAPLINK='',EINV='',TAGS=[],DOCS={},CONTACTS=[];
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyW_m_3BLHCKCsga83ait8fDZYWfqrJghuEZrGrcVqQPlu_qizcsqtX5-Xd51xQooMO/exec';
+  var LAT='',LNG='',MAPLINK='',EINV='',TAGS=[],DOCS={},CONTACTS=[];
 
 function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
 function toast(msg,type){var c={success:'#16a34a',error:'#dc2626',warning:'#b45309',info:'#185FA5'}[type||'info'];var el=document.createElement('div');el.textContent=msg;el.style.cssText='background:#fff;border-right:4px solid '+c+';color:#1f2937;padding:12px 16px;border-radius:11px;box-shadow:0 6px 24px rgba(0,0,0,.16);font-size:13.5px;font-weight:600';document.getElementById('toastBox').appendChild(el);setTimeout(function(){el.style.transition='opacity .3s';el.style.opacity='0';setTimeout(function(){el.remove();},300);},3400);}
